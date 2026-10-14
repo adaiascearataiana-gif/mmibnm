@@ -23,6 +23,8 @@
   button{font-family:inherit;border:none;border-radius:10px;padding:11px 16px;font-weight:600;cursor:pointer;font-size:.9rem;transition:.2s}
   .btn-noti{background:var(--dourado);color:#4a3c0a}
   .btn-noti:hover{filter:brightness(1.05)}
+  .btn-excel{background:#15803d;color:#fff}
+  .btn-excel:hover{background:#14532d}
   .btn-atualizar{background:var(--verde);color:#fff}
   .btn-atualizar:hover{background:var(--verde-claro)}
   .status{max-width:1000px;margin:14px auto 0;padding:0 18px;font-size:.85rem;color:var(--cinza)}
@@ -55,6 +57,7 @@
     <div class="stat"><div class="n" id="hoje">0</div><div class="l">Hoje</div></div>
   </div>
   <div class="acoes">
+    <button class="btn-excel" id="btnExcel">⬇️ Exportar Excel</button>
     <button class="btn-noti" id="btnNoti">🔔 Ativar notificações</button>
     <button class="btn-atualizar" id="btnAtualizar">Atualizar</button>
   </div>
@@ -65,6 +68,7 @@
 <div class="lista" id="lista"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <script src="config.js"></script>
 <script>
   const lista = document.getElementById("lista");
@@ -149,6 +153,24 @@
   }
 
   document.getElementById("btnAtualizar").addEventListener("click", carregar);
+
+  // Exportar para Excel (.xlsx)
+  document.getElementById("btnExcel").addEventListener("click", () => {
+    if (!registros.length){ alert("Ainda não há respostas para exportar."); return; }
+    const linhas = registros.map(r => ({
+      "Nome": r.nome || "",
+      "Dias disponíveis": (r.dias || []).join(", "),
+      "Outro horário?": r.outro_horario ? "Sim" : "Não",
+      "Horário": r.horario || "",
+      "Data/Hora do envio": fmtData(r.created_at)
+    }));
+    const ws = XLSX.utils.json_to_sheet(linhas);
+    ws["!cols"] = [{wch:26},{wch:46},{wch:14},{wch:12},{wch:22}];
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Respostas");
+    const hoje = new Date().toISOString().slice(0,10);
+    XLSX.writeFile(wb, `respostas-ibnm-${hoje}.xlsx`);
+  });
   carregar();
   assinar();
 </script>

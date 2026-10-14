@@ -48,7 +48,17 @@ create policy "leitura das respostas"
   on respostas_disponibilidade
   for select to anon
   using (true);
+
+-- Permite EDITAR a resposta (necessário para o usuário alterar depois de enviar)
+create policy "pode editar a resposta"
+  on respostas_disponibilidade
+  for update to anon
+  using (true) with check (true);
 ```
+
+> **Já criou a tabela antes?** Rode só o comando da política de edição acima
+> (o bloco `create policy "pode editar a resposta" ...`) para habilitar a
+> edição depois do envio.
 
 4. Depois, ative o tempo real: menu **Database → Replication** (ou
    **Realtime**) e marque a tabela `respostas_disponibilidade`.
@@ -102,6 +112,30 @@ respostas_disponibilidade**.
 No Supabase use **Database → Webhooks**: crie um webhook no evento *Insert* da
 tabela e aponte para um serviço de e-mail (ex.: Resend) ou para o Zapier/Make.
 Assim cada resposta nova dispara um e-mail para você.
+
+---
+
+## Prazo final (o formulário se tranca sozinho)
+
+O formulário tem uma data limite. Depois dela, ele fecha automaticamente: não
+aceita novas respostas nem edições, e mostra um aviso vermelho avisando que o
+período encerrou. Antes do prazo, aparece um aviso amarelo informando até
+quando dá para responder.
+
+A data fica no arquivo `config.js`, na linha:
+
+```js
+const PRAZO_FINAL = "2026-10-17T23:59:59"; // 17/10 às 23:59 (horário local)
+```
+
+Para mudar o prazo, é só trocar essa data (formato AAAA-MM-DDTHH:MM:SS).
+
+## Editar depois de enviar
+
+Depois de enviar, a pessoa vê um botão **“Editar minha resposta”**. Ao alterar
+e reenviar, a **mesma resposta é atualizada** (não cria uma nova). Se a pessoa
+fechar e abrir o link de novo no mesmo aparelho, o formulário reconhece que ela
+já respondeu e permite editar. Isso funciona enquanto o prazo não terminar.
 
 ---
 

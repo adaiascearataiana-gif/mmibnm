@@ -6,143 +6,151 @@
 <title>Disponibilidade — Ministério de Música IBNM</title>
 <link rel="icon" href="logo.jpg" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
 <style>
+  /* =====================================================================
+     🎨 PERSONALIZE AQUI — estilo moderno e minimalista.
+     Mude só estes valores que todo o visual acompanha.
+     ===================================================================== */
   :root{
-    --verde-escuro:#0f3d2e;
-    --verde:#1b7a4b;
-    --verde-claro:#2e9e63;
-    --verde-suave:#e8f5ee;
-    --dourado:#d9b64e;
-    --laranja:#e8871e;
-    --laranja-h:#cf7714;
-    --verde-btn:#1f9d57;
-    --verde-btn-h:#17824763;
-    --texto:#1d2b24;
-    --cinza:#6b7a72;
-    --borda:#d6e4dc;
-    --sombra:0 10px 30px rgba(15,61,46,.12);
+    --verde:#15803d;          /* verde principal */
+    --verde-escuro:#14532d;   /* verde escuro (títulos) */
+    --verde-suave:#f0faf3;    /* fundo verde bem leve */
+    --laranja:#ea580c;        /* botão EDITAR */
+    --tinta:#111827;          /* texto principal */
+    --cinza:#6b7280;          /* texto secundário */
+    --cinza-claro:#9ca3af;    /* dicas */
+    --borda:#e5e7eb;          /* bordas finas */
+    --fundo:#f9fafb;          /* fundo da página */
+    --raio:14px;              /* arredondamento */
+    --fonte:'Inter',system-ui,-apple-system,sans-serif;
   }
   *{box-sizing:border-box;margin:0;padding:0}
   body{
-    font-family:'Poppins',system-ui,sans-serif;
-    background:linear-gradient(160deg,#f3f9f5 0%,#e3f1e9 100%);
-    color:var(--texto);
+    font-family:var(--fonte);
+    background:var(--fundo);
+    color:var(--tinta);
     min-height:100vh;
-    padding:28px 16px 60px;
+    padding:40px 16px 72px;
     display:flex;justify-content:center;align-items:flex-start;
+    -webkit-font-smoothing:antialiased;
   }
   .card{
-    width:100%;max-width:560px;
-    background:#fff;border-radius:22px;
-    box-shadow:var(--sombra);
-    overflow:hidden;
+    width:100%;max-width:480px;
+    background:#fff;
+    border:1px solid var(--borda);
+    border-radius:calc(var(--raio) + 6px);
   }
-  .topo{
-    background:linear-gradient(135deg,var(--verde-escuro),var(--verde));
-    color:#fff;text-align:center;
-    padding:30px 24px 26px;position:relative;
-  }
-  .topo::after{
-    content:"";position:absolute;left:0;right:0;bottom:-1px;height:4px;
-    background:linear-gradient(90deg,var(--dourado),#f0d583,var(--dourado));
-  }
+  /* Cabeçalho minimalista */
+  .topo{text-align:center;padding:40px 32px 8px}
   .logo{
-    width:92px;height:92px;border-radius:50%;
+    width:60px;height:60px;border-radius:14px;
     object-fit:cover;background:#fff;
-    border:3px solid var(--dourado);
-    box-shadow:0 6px 18px rgba(0,0,0,.25);
-    margin-bottom:14px;
+    border:1px solid var(--borda);margin:0 auto 18px;display:block;
   }
-  .topo h1{font-size:1.35rem;font-weight:600;letter-spacing:.3px}
-  .topo p{opacity:.9;font-size:.92rem;margin-top:6px;font-weight:400}
-  .conteudo{padding:28px 26px 30px}
-  .campo{margin-bottom:24px}
-  label.titulo{display:block;font-weight:600;font-size:1.02rem;margin-bottom:4px;color:var(--verde-escuro)}
-  .ajuda{font-size:.85rem;color:var(--cinza);margin-bottom:14px}
+  .topo h1{font-size:1.35rem;font-weight:600;letter-spacing:-.02em;color:var(--verde-escuro)}
+  .topo p{color:var(--cinza);font-size:.9rem;margin-top:6px;font-weight:400}
+  .conteudo{padding:28px 32px 36px}
+  .campo{margin-bottom:30px}
+  label.titulo{display:block;font-weight:600;font-size:.9rem;margin-bottom:3px;color:var(--tinta)}
+  .ajuda{font-size:.82rem;color:var(--cinza-claro);margin-bottom:14px}
   input[type=text]{
-    width:100%;padding:13px 14px;border:1.5px solid var(--borda);
-    border-radius:12px;font-family:inherit;font-size:1rem;color:var(--texto);
-    transition:.2s;
+    width:100%;padding:12px 14px;border:1px solid var(--borda);
+    border-radius:var(--raio);font-family:inherit;font-size:.95rem;color:var(--tinta);
+    transition:.15s;background:#fff;
   }
-  input[type=text]:focus{outline:none;border-color:var(--verde-claro);box-shadow:0 0 0 3px var(--verde-suave)}
-  .dias{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  input[type=text]::placeholder{color:var(--cinza-claro)}
+  input[type=text]:focus{outline:none;border-color:var(--verde);box-shadow:0 0 0 3px rgba(21,128,61,.12)}
+  /* Opções — lista vertical limpa */
+  .dias{display:flex;flex-direction:column;gap:8px}
   .opcao{
-    display:flex;align-items:center;gap:11px;
-    padding:13px 14px;border:1.5px solid var(--borda);
-    border-radius:12px;cursor:pointer;transition:.18s;background:#fff;
+    display:flex;align-items:center;gap:12px;
+    padding:12px 14px;border:1px solid var(--borda);
+    border-radius:var(--raio);cursor:pointer;transition:.15s;background:#fff;
     user-select:none;
   }
-  .opcao:hover{border-color:var(--verde-claro);background:var(--verde-suave)}
+  .opcao:hover{border-color:var(--verde);background:var(--verde-suave)}
   .opcao input{display:none}
   .marca{
-    width:22px;height:22px;border-radius:7px;border:2px solid var(--borda);
-    flex:0 0 auto;display:flex;align-items:center;justify-content:center;
-    transition:.18s;
+    width:20px;height:20px;border-radius:6px;border:1.5px solid var(--borda);
+    flex:0 0 auto;display:flex;align-items:center;justify-content:center;transition:.15s;
   }
-  .marca svg{width:13px;height:13px;opacity:0;transform:scale(.4);transition:.18s;stroke:#fff;stroke-width:3.5}
+  .marca svg{width:12px;height:12px;opacity:0;transform:scale(.5);transition:.15s;stroke:#fff;stroke-width:3.5}
   .opcao input:checked ~ .marca{background:var(--verde);border-color:var(--verde)}
   .opcao input:checked ~ .marca svg{opacity:1;transform:scale(1)}
   .opcao input:checked ~ .texto-op{color:var(--verde-escuro);font-weight:600}
   .opcao:has(input:checked){border-color:var(--verde);background:var(--verde-suave)}
-  .texto-op{font-size:.98rem}
-  .extra{grid-column:1 / -1}
+  .texto-op{font-size:.92rem}
+  .divisor{height:1px;background:var(--borda);margin:16px 0}
   .horario-box{
-    margin-top:12px;padding:16px;border-radius:14px;
-    background:var(--verde-suave);border:1.5px dashed var(--verde-claro);
-    display:none;animation:abre .25s ease;
+    margin-top:10px;padding:0;
+    display:none;
   }
-  .horario-box.ativo{display:block}
-  @keyframes abre{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
-  .horario-box label{display:block;font-weight:600;font-size:.92rem;margin-bottom:8px;color:var(--verde-escuro)}
+  .horario-box.ativo{display:block;animation:abre .2s ease}
+  @keyframes abre{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
+  .horario-box label{display:block;font-weight:500;font-size:.82rem;margin-bottom:8px;color:var(--cinza)}
   input[type=time]{
-    width:100%;padding:12px 14px;border:1.5px solid var(--borda);
-    border-radius:12px;font-family:inherit;font-size:1rem;background:#fff;color:var(--texto);
+    width:100%;padding:12px 14px;border:1px solid var(--borda);
+    border-radius:var(--raio);font-family:inherit;font-size:.95rem;background:#fff;color:var(--tinta);
   }
-  input[type=time]:focus{outline:none;border-color:var(--verde-claro);box-shadow:0 0 0 3px #fff}
+  input[type=time]:focus{outline:none;border-color:var(--verde);box-shadow:0 0 0 3px rgba(21,128,61,.12)}
   .btn{
-    width:100%;padding:15px;border:none;border-radius:14px;
-    font-family:inherit;font-size:1.05rem;font-weight:600;cursor:pointer;
-    transition:.2s;color:#fff;
+    width:100%;padding:13px;border:none;border-radius:var(--raio);
+    font-family:inherit;font-size:.95rem;font-weight:600;cursor:pointer;
+    transition:.15s;color:#fff;letter-spacing:.01em;
   }
-  .btn-salvar{background:var(--verde);box-shadow:0 8px 20px rgba(27,122,75,.3)}
-  .btn-salvar:hover{background:var(--verde-claro);transform:translateY(-1px)}
+  .btn-salvar{background:var(--verde)}
+  .btn-salvar:hover{background:var(--verde-escuro)}
   /* Resumo */
   .resumo{display:none}
-  .resumo.ativo{display:block;animation:abre .3s ease}
-  .resumo h2{color:var(--verde-escuro);font-size:1.2rem;margin-bottom:4px}
-  .resumo .sub{color:var(--cinza);font-size:.9rem;margin-bottom:18px}
+  .resumo.ativo{display:block;animation:abre .25s ease}
+  .resumo h2{color:var(--tinta);font-size:1.15rem;font-weight:600;margin-bottom:4px;letter-spacing:-.01em}
+  .resumo .sub{color:var(--cinza);font-size:.86rem;margin-bottom:22px}
   .linha-resumo{
-    display:flex;gap:12px;padding:14px 16px;border-radius:12px;
-    background:var(--verde-suave);margin-bottom:12px;
+    display:flex;gap:14px;padding:14px 0;border-bottom:1px solid var(--borda);
   }
-  .linha-resumo .rot{font-weight:600;color:var(--verde-escuro);min-width:94px;font-size:.92rem}
-  .linha-resumo .val{color:var(--texto);font-size:.95rem;flex:1}
-  .chips{display:flex;flex-wrap:wrap;gap:7px}
-  .chip{background:#fff;border:1.5px solid var(--verde-claro);color:var(--verde-escuro);
-    padding:5px 11px;border-radius:20px;font-size:.85rem;font-weight:500}
-  .botoes-resumo{display:flex;gap:12px;margin-top:22px}
-  .btn-editar{background:var(--laranja);box-shadow:0 8px 20px rgba(232,135,30,.3)}
-  .btn-editar:hover{background:var(--laranja-h);transform:translateY(-1px)}
-  .btn-enviar{background:var(--verde-btn);box-shadow:0 8px 20px rgba(31,157,87,.3)}
-  .btn-enviar:hover{background:#167a43;transform:translateY(-1px)}
-  .btn:disabled{opacity:.6;cursor:not-allowed;transform:none}
+  .linha-resumo:first-of-type{border-top:1px solid var(--borda)}
+  .linha-resumo .rot{font-weight:500;color:var(--cinza);min-width:70px;font-size:.86rem}
+  .linha-resumo .val{color:var(--tinta);font-size:.92rem;flex:1}
+  .chips{display:flex;flex-wrap:wrap;gap:6px}
+  .chip{background:var(--verde-suave);border:1px solid var(--verde);color:var(--verde-escuro);
+    padding:4px 10px;border-radius:8px;font-size:.8rem;font-weight:500}
+  .botoes-resumo{display:flex;gap:10px;margin-top:26px}
+  .btn-editar{background:#fff;color:var(--laranja);border:1.5px solid var(--laranja)}
+  .btn-editar:hover{background:var(--laranja);color:#fff}
+  .btn-enviar{background:var(--verde)}
+  .btn-enviar:hover{background:var(--verde-escuro)}
+  .btn:disabled{opacity:.55;cursor:not-allowed}
   /* Sucesso */
-  .sucesso{display:none;text-align:center;padding:16px 4px}
-  .sucesso.ativo{display:block;animation:abre .3s ease}
+  .sucesso{display:none;text-align:center;padding:24px 4px 8px}
+  .sucesso.ativo{display:block;animation:abre .25s ease}
   .check-ok{
-    width:78px;height:78px;border-radius:50%;background:var(--verde-suave);
-    display:flex;align-items:center;justify-content:center;margin:0 auto 18px;
+    width:60px;height:60px;border-radius:50%;background:var(--verde-suave);
+    display:flex;align-items:center;justify-content:center;margin:0 auto 20px;
   }
-  .check-ok svg{width:40px;height:40px;stroke:var(--verde);stroke-width:3}
-  .sucesso h2{color:var(--verde-escuro);margin-bottom:8px}
-  .sucesso p{color:var(--cinza);font-size:.95rem;line-height:1.5}
-  .btn-novo{margin-top:22px;background:var(--verde)}
-  .btn-novo:hover{background:var(--verde-claro)}
-  .erro{color:#c0392b;font-size:.88rem;margin-top:12px;text-align:center;display:none}
+  .check-ok svg{width:30px;height:30px;stroke:var(--verde);stroke-width:3}
+  .sucesso h2{color:var(--tinta);font-weight:600;margin-bottom:8px;font-size:1.2rem}
+  .sucesso p{color:var(--cinza);font-size:.9rem;line-height:1.6}
+  .btn-novo{margin-top:24px;background:var(--verde)}
+  .btn-novo:hover{background:var(--verde-escuro)}
+  .botoes-sucesso{display:flex;flex-direction:column;gap:10px;margin-top:24px}
+  .botoes-sucesso .btn{margin-top:0}
+  .aviso-editar{
+    background:var(--verde-suave);border:1px solid var(--verde);
+    color:var(--verde-escuro);border-radius:var(--raio);
+    padding:12px 14px;font-size:.84rem;margin-bottom:22px;display:none;
+  }
+  .aviso-editar.ativo{display:block}
+  .erro{color:#dc2626;font-size:.84rem;margin-top:14px;text-align:center;display:none}
   .erro.ativo{display:block}
-  .rodape{text-align:center;font-size:.78rem;color:var(--cinza);padding:0 24px 22px}
-  @media(max-width:420px){.dias{grid-template-columns:1fr}.botoes-resumo{flex-direction:column}}
+  .rodape{text-align:center;font-size:.74rem;color:var(--cinza-claro);padding:0 24px 26px;letter-spacing:.03em}
+  /* Avisos / alertas */
+  .alerta{display:flex;gap:12px;align-items:flex-start;margin:0 32px 4px;padding:14px 16px;border-radius:var(--raio);font-size:.86rem;line-height:1.45}
+  .alerta .ico{font-size:1.1rem;line-height:1.2;flex:0 0 auto}
+  .alerta b{font-weight:600}
+  .alerta.aviso{background:#fffbeb;border:1px solid #fde68a;color:#92400e}
+  .alerta.info{background:var(--verde-suave);border:1px solid #86efac;color:var(--verde-escuro)}
+  .alerta.travado{background:#fef2f2;border:1px solid #fca5a5;color:#991b1b;margin:0 32px 10px}
 </style>
 </head>
 <body>
@@ -153,8 +161,12 @@
     <p>Ministério de Música IBNM</p>
   </div>
 
+  <!-- AVISO / PRAZO -->
+  <div id="alerta"></div>
+
   <!-- ETAPA 1: FORMULÁRIO -->
   <form id="form" class="conteudo">
+    <div class="aviso-editar" id="avisoEditar">✏️ Você já enviou uma resposta. As alterações abaixo vão <b>atualizar</b> a sua resposta anterior.</div>
     <div class="campo">
       <label class="titulo" for="nome">Seu nome</label>
       <div class="ajuda">Para sabermos de quem é a resposta.</div>
@@ -164,13 +176,12 @@
     <div class="campo">
       <label class="titulo">Dias da semana disponíveis</label>
       <div class="ajuda">Marque todos os dias em que você pode. Pode escolher mais de um.</div>
-      <div class="dias" id="dias">
-        <!-- opcoes injetadas via JS -->
-      </div>
+      <div class="dias" id="dias"></div>
     </div>
 
     <div class="campo">
-      <label class="opcao extra">
+      <div class="divisor"></div>
+      <label class="opcao">
         <input type="checkbox" id="chkOutro" value="Outro horário" />
         <span class="marca"><svg viewBox="0 0 24 24" fill="none"><path d="M4 12l5 5L20 6"/></svg></span>
         <span class="texto-op">Outro horário específico</span>
@@ -181,7 +192,7 @@
       </div>
     </div>
 
-    <button type="submit" class="btn btn-salvar">Salvar</button>
+    <button type="submit" class="btn btn-salvar" id="btnSalvar">Salvar</button>
   </form>
 
   <!-- ETAPA 2: RESUMO -->
@@ -201,12 +212,15 @@
   <!-- ETAPA 3: SUCESSO -->
   <div class="conteudo sucesso" id="sucesso">
     <div class="check-ok"><svg viewBox="0 0 24 24" fill="none"><path d="M4 12l5 5L20 6"/></svg></div>
-    <h2>Resposta enviada!</h2>
-    <p>Obrigado! Sua disponibilidade foi registrada com sucesso e já chegou até nós.</p>
-    <button type="button" class="btn btn-novo" id="btnNovo">Enviar outra resposta</button>
+    <h2 id="tituloSucesso">Resposta enviada!</h2>
+    <p id="textoSucesso">Obrigado! Sua disponibilidade foi registrada com sucesso e já chegou até nós.</p>
+    <div class="botoes-sucesso">
+      <button type="button" class="btn btn-editar" id="btnEditarEnviada">Editar minha resposta</button>
+      <button type="button" class="btn btn-novo" id="btnNovo">Enviar outra resposta</button>
+    </div>
   </div>
 
-  <div class="rodape">Ministério de Música IBNM • Commitment · Servitivm · Moribvs</div>
+  <div class="rodape">COMMITMENT · SERVITIVM · MORIBVS</div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
