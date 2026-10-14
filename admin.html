@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Respostas — Painel IBNM</title>
+<link rel="icon" href="logo.jpg" />
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root{--verde-escuro:#0f3d2e;--verde:#1b7a4b;--verde-claro:#2e9e63;--verde-suave:#e8f5ee;--dourado:#d9b64e;--texto:#1d2b24;--cinza:#6b7a72;--borda:#d6e4dc;}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Poppins',system-ui,sans-serif;background:#f3f9f5;color:var(--texto);padding:0 0 60px}
+  header{background:linear-gradient(135deg,var(--verde-escuro),var(--verde));color:#fff;padding:22px 20px;display:flex;align-items:center;gap:14px;box-shadow:0 4px 20px rgba(15,61,46,.2)}
+  header img{width:52px;height:52px;border-radius:50%;border:2px solid var(--dourado);object-fit:cover;background:#fff}
+  header h1{font-size:1.15rem;font-weight:600}
+  header p{font-size:.82rem;opacity:.85}
+  .barra{max-width:1000px;margin:20px auto 0;padding:0 18px;display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between}
+  .stats{display:flex;gap:12px;flex-wrap:wrap}
+  .stat{background:#fff;border-radius:14px;padding:12px 18px;box-shadow:0 6px 16px rgba(15,61,46,.08);min-width:120px}
+  .stat .n{font-size:1.6rem;font-weight:700;color:var(--verde)}
+  .stat .l{font-size:.78rem;color:var(--cinza)}
+  .acoes{display:flex;gap:10px}
+  button{font-family:inherit;border:none;border-radius:10px;padding:11px 16px;font-weight:600;cursor:pointer;font-size:.9rem;transition:.2s}
+  .btn-noti{background:var(--dourado);color:#4a3c0a}
+  .btn-noti:hover{filter:brightness(1.05)}
+  .btn-atualizar{background:var(--verde);color:#fff}
+  .btn-atualizar:hover{background:var(--verde-claro)}
+  .status{max-width:1000px;margin:14px auto 0;padding:0 18px;font-size:.85rem;color:var(--cinza)}
+  .status .ponto{display:inline-block;width:9px;height:9px;border-radius:50%;background:#bbb;margin-right:6px;vertical-align:middle}
+  .status.ok .ponto{background:#2ecc71;box-shadow:0 0 0 3px rgba(46,204,113,.25)}
+  .lista{max-width:1000px;margin:18px auto 0;padding:0 18px;display:grid;gap:14px}
+  .resp{background:#fff;border-radius:16px;padding:18px 20px;box-shadow:0 6px 18px rgba(15,61,46,.08);border-left:5px solid var(--verde);animation:surge .35s ease}
+  .resp.novo{border-left-color:var(--dourado);background:#fffdf4}
+  @keyframes surge{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+  .resp .topo-r{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px;gap:10px}
+  .resp .nome{font-weight:600;font-size:1.08rem;color:var(--verde-escuro)}
+  .resp .data{font-size:.78rem;color:var(--cinza);white-space:nowrap}
+  .chips{display:flex;flex-wrap:wrap;gap:7px;margin-top:4px}
+  .chip{background:var(--verde-suave);border:1px solid var(--verde-claro);color:var(--verde-escuro);padding:4px 11px;border-radius:20px;font-size:.82rem}
+  .chip.hora{background:#fff4df;border-color:var(--dourado);color:#8a6d12}
+  .vazio{text-align:center;color:var(--cinza);padding:60px 20px}
+  .vazio svg{width:60px;height:60px;stroke:var(--borda);stroke-width:1.5;margin-bottom:14px}
+  .aviso{max-width:1000px;margin:14px auto 0;padding:14px 18px;background:#fff8e6;border:1px solid #f0d583;border-radius:12px;color:#7a5e0a;font-size:.85rem}
+</style>
+</head>
+<body>
+<header>
+  <img src="logo.jpg" alt="IBNM" />
+  <div><h1>Painel de Respostas</h1><p>Ministério de Música IBNM</p></div>
+</header>
+
+<div class="barra">
+  <div class="stats">
+    <div class="stat"><div class="n" id="total">0</div><div class="l">Respostas</div></div>
+    <div class="stat"><div class="n" id="hoje">0</div><div class="l">Hoje</div></div>
+  </div>
+  <div class="acoes">
+    <button class="btn-noti" id="btnNoti">🔔 Ativar notificações</button>
+    <button class="btn-atualizar" id="btnAtualizar">Atualizar</button>
+  </div>
+</div>
+
+<div class="status" id="status"><span class="ponto"></span><span id="statusTxt">Conectando...</span></div>
+<div id="avisoCfg"></div>
+<div class="lista" id="lista"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
+<script>
+  const lista = document.getElementById("lista");
+  const elTotal = document.getElementById("total");
+  const elHoje = document.getElementById("hoje");
+  const statusEl = document.getElementById("status");
+  const statusTxt = document.getElementById("statusTxt");
+  let sb = null;
+
+  if (!SUPABASE_URL || SUPABASE_URL.startsWith("COLE_")) {
+    document.getElementById("avisoCfg").innerHTML =
+      '<div class="aviso">⚠️ Supabase ainda não configurado. Edite o arquivo <b>config.js</b> com a URL e a chave do seu projeto.</div>';
+  } else {
+    sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  }
+
+  const fmtData = (iso) => {
+    const d = new Date(iso);
+    return d.toLocaleDateString("pt-BR") + " às " + d.toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"});
+  };
+  const ehHoje = (iso) => new Date(iso).toDateString() === new Date().toDateString();
+
+  function cardHtml(r, novo=false){
+    const dias = (r.dias||[]).map(d=>`<span class="chip">${d}</span>`).join("");
+    const hora = r.outro_horario && r.horario ? `<span class="chip hora">⏰ ${r.horario}</span>` : "";
+    return `<div class="resp ${novo?'novo':''}">
+      <div class="topo-r"><span class="nome">${r.nome||'Sem nome'}</span><span class="data">${fmtData(r.created_at)}</span></div>
+      <div class="chips">${dias}${hora || (dias?'':'<span class="chip">—</span>')}</div>
+    </div>`;
+  }
+
+  let registros = [];
+  function render(){
+    elTotal.textContent = registros.length;
+    elHoje.textContent = registros.filter(r=>ehHoje(r.created_at)).length;
+    if (!registros.length){
+      lista.innerHTML = '<div class="vazio"><svg viewBox="0 0 24 24" fill="none"><path d="M4 7h16M4 12h16M4 17h10"/></svg><div>Nenhuma resposta ainda. Elas aparecerão aqui automaticamente.</div></div>';
+      return;
+    }
+    lista.innerHTML = registros.map(r=>cardHtml(r)).join("");
+  }
+
+  async function carregar(){
+    if(!sb) return;
+    const { data, error } = await sb.from(TABELA).select("*").order("created_at",{ascending:false});
+    if (error){ statusTxt.textContent = "Erro ao carregar: "+error.message; return; }
+    registros = data || [];
+    render();
+    statusEl.classList.add("ok");
+    statusTxt.textContent = "Conectado — atualização em tempo real ativa";
+  }
+
+  // Notificações do navegador
+  const btnNoti = document.getElementById("btnNoti");
+  btnNoti.addEventListener("click", async () => {
+    if (!("Notification" in window)) { alert("Seu navegador não suporta notificações."); return; }
+    const p = await Notification.requestPermission();
+    if (p === "granted"){ btnNoti.textContent = "🔔 Notificações ativas"; btnNoti.style.opacity=".7"; new Notification("IBNM", {body:"Notificações ativadas! Você será avisado a cada nova resposta.", icon:"logo.jpg"}); }
+  });
+  if ("Notification" in window && Notification.permission === "granted"){ btnNoti.textContent="🔔 Notificações ativas"; btnNoti.style.opacity=".7"; }
+
+  function notificar(r){
+    if ("Notification" in window && Notification.permission === "granted"){
+      new Notification("Nova resposta — "+(r.nome||"Alguém"), {
+        body: (r.dias||[]).join(", ") + (r.horario? " · "+r.horario : ""),
+        icon: "logo.jpg"
+      });
+    }
+  }
+
+  // Tempo real
+  function assinar(){
+    if(!sb) return;
+    sb.channel("respostas-rt")
+      .on("postgres_changes",{event:"INSERT",schema:"public",table:TABELA},(payload)=>{
+        registros.unshift(payload.new);
+        render();
+        const primeiro = lista.querySelector(".resp");
+        if (primeiro) primeiro.classList.add("novo");
+        notificar(payload.new);
+      }).subscribe();
+  }
+
+  document.getElementById("btnAtualizar").addEventListener("click", carregar);
+  carregar();
+  assinar();
+</script>
+</body>
+</html>
